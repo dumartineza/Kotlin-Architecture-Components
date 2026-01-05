@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">android_kotlin_module</string>
+    <string name="content_description_logo">Logo Xcaret</string>
+    <string name="training_app">Xcaret App</string>
+    <string name="username_or_email">Username or Email</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="content_description_gif">Gif of Itachi</string>
+    <string name="please_wait">Please wait…</string>
+    <string name="error_bad_credentials_title">Authentication failed</string>
+    <string name="error_bad_credentials_message">The credentials are incorrect</string>
+    <string name="ok">OK</string>
+    <string name="title">Title</string>
+    <string name="popularity">Popularity</string>
+    <string name="rating">Rating</string>
+    <string name="popularity_text">Popularity: %1$1.0f</string>
+    <string name="rating_text">Rating: %1$1.0f</string>
+    <string name="movies_list">Movies List</string>
+</resources>

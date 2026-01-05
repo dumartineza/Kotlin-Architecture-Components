@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- CAMBIA ESTO -->
+    <style name="Theme.Android_kotlin_module" parent="Theme.AppCompat.Light.NoActionBar" />
+    <!-- O usa: Theme.AppCompat.DayNight.NoActionBar -->
+
+    <!-- LoginTheme (opcional) -->
+    <style name="LoginTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/design_default_color_primary</item>
+        <item name="colorPrimaryDark">@color/design_default_color_primary_dark</item>
+        <item name="colorAccent">@color/design_default_color_primary_variant</item>
+    </style>
+
+</resources>
