@@ -16,4 +16,7 @@
     <string name="popularity_text">Popularity: %1$1.0f</string>
     <string name="rating_text">Rating: %1$1.0f</string>
     <string name="movies_list">Movies List</string>
+    <string name="menu_sort_by_name">Sort by name</string>
+    <string name="menu_sort_by_popularity">Sort by popularity</string>
+    <string name="menu_sort_by_rating">Sort by rating</string>
 </resources>

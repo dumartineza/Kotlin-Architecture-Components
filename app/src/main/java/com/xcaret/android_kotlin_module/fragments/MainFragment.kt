@@ -1,6 +1,8 @@
 package com.xcaret.android_kotlin_module.fragments
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -30,6 +32,7 @@ class MainFragment : BaseFragment() {
 
     override fun onViewFragmentCreated(view: View, savedInstanceState: Bundle?) {
         showBackIconOnToolbar()
+        setHasOptionsMenu(true)
         setTitle(getString(R.string.movies_list))
         binding.swipeRefreshMovies.setOnRefreshListener {
             if (binding.swipeRefreshMovies.isRefreshing) {
@@ -38,9 +41,18 @@ class MainFragment : BaseFragment() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_main, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            onBackPressed()
+        when (item.itemId) {
+            android.R.id.home -> onBackPressed()
+            R.id.action_menu_sort_by_name -> moviesViewModel.sortMoviesByName()
+            R.id.action_menu_sort_by_popularity -> moviesViewModel.sortMoviesByPopularity()
+            else -> moviesViewModel.sortMoviesByRating()
         }
         return super.onOptionsItemSelected(item)
     }

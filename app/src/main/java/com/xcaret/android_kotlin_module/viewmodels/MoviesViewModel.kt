@@ -45,4 +45,10 @@ class MoviesViewModel : ViewModel() {
             isRefreshing.postValue(false)
         }
     }
+
+    fun sortMoviesByName() = movies.postValue(movies.value?.sortedBy { it.title })
+
+    fun sortMoviesByPopularity() = movies.postValue(movies.value?.sortedByDescending { it.popularity })
+
+    fun sortMoviesByRating() = movies.postValue(movies.value?.sortedByDescending { it.rating })
 }

@@ -1,6 +1,5 @@
 package com.xcaret.android_kotlin_module.interfaces
 
-import com.xcaret.android_kotlin_module.models.Movie
 import com.xcaret.android_kotlin_module.models.MovieResponse
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -10,32 +9,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 import java.util.concurrent.TimeUnit
-
-/*
-const val BASE_URL = "https://android-course-api.herokuapp.com/"
-
-interface MoviesAPIService {
-
-    @GET("api/movies")
-    suspend fun getAllMovies() : Response<List<Movie>>
-
-    companion object {
-        fun create() : MoviesAPIService {
-            val okHttpClient = OkHttpClient.Builder()
-                .connectTimeout(60, TimeUnit.SECONDS)
-                .readTimeout(60, TimeUnit.SECONDS)
-                .addInterceptor(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY })
-                .build()
-            val retrofit = Retrofit.Builder()
-                .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl(BASE_URL)
-                .client(okHttpClient)
-                .build()
-            return retrofit.create(MoviesAPIService::class.java)
-        }
-    }
-}
- */
 
 const val TMDB_BASE_URL = "https://api.themoviedb.org/3/"
 const val TMDB_API_KEY = "4632e21c3fc6c5d05f09da673b59892c"

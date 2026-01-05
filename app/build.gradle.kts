@@ -67,7 +67,17 @@ dependencies {
 
     // Glide
     implementation(libs.glide)
+    implementation(libs.core.ktx)
     ksp(libs.glide.ksp)
+
+    // Material
+    implementation(libs.androidx.material3)
+
+    // Room
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
+    testImplementation(libs.androidx.room.testing)
 
     // Lifecycle
     implementation(libs.lifecycle.livedata)
@@ -81,6 +91,7 @@ dependencies {
 
     // Testing
     testImplementation(libs.junit)
+    testImplementation(libs.robolectric)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
