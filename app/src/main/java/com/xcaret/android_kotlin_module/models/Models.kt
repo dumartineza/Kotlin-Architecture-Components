@@ -1,5 +1,7 @@
 package com.xcaret.android_kotlin_module.models
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 data class User(
@@ -12,9 +14,10 @@ data class MovieResponse(
     val results: List<Movie>
 )
 
+@Entity(tableName = "movies")
 data class Movie(
+    @PrimaryKey var id: Long = 0,
     var title: String = "",
-    var id: Long = 0,
     var description: String = "",
     var release_date: String = "",
     var genres: String = "",
