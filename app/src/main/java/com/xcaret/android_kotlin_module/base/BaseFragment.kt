@@ -28,6 +28,7 @@ abstract class BaseFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        context?.theme?.applyStyle(R.style.LoginTheme, true)
         hasToolbar = arguments?.getBoolean(HAS_TOOLBAR_KEY, false) ?: false
         toolbarResId = arguments?.getInt(RES_ID_CUSTOM_TOOLBAR, toolbarResId) ?: toolbarResId
         toolbarId = arguments?.getInt(ID_CUSTOM_TOOLBAR, toolbarId) ?: toolbarId

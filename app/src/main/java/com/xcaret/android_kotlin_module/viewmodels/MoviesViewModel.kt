@@ -1,33 +1,28 @@
 package com.xcaret.android_kotlin_module.viewmodels
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.xcaret.android_kotlin_module.database.MoviesDatabase
 import com.xcaret.android_kotlin_module.models.Movie
 import com.xcaret.android_kotlin_module.repositories.MoviesRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MoviesViewModel(
-    application: Application
-) : AndroidViewModel(application) {
+@HiltViewModel
+class MoviesViewModel @Inject constructor(
+    private val repository: MoviesRepository
+) : ViewModel() {
 
     private lateinit var movies: MutableLiveData<List<Movie>>
     var isRefreshing: MutableLiveData<Boolean> = MutableLiveData()
 
     init {
         getMovies()
-    }
-
-    private val repository: MoviesRepository by lazy {
-        MoviesRepository(
-            database = MoviesDatabase.getInstance(application)
-        )
     }
 
     @JvmOverloads

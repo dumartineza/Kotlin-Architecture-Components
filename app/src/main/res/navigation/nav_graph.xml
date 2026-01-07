@@ -5,36 +5,74 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/splashFragment">
 
+    <!--
+    popUpTo: Elimina fragmentos del back stack hasta el especificado
+    popUpToInclusive="true": También elimina el fragmento especificado
+    -->
+
+    <!-- SPLASH -->
     <fragment
         android:id="@+id/splashFragment"
         android:name="com.xcaret.android_kotlin_module.fragments.SplashFragment"
         android:label="SplashFragment"
         tools:layout="@layout/fragment_splash">
+
+        <!-- Al ir a Login, eliminar Splash del back stack -->
         <action
             android:id="@+id/action_splashFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"/>
+
+        <!-- Al ir a Main (usuario ya autenticado), eliminar Splash -->
+        <action
+            android:id="@+id/action_splashFragment_to_mainFragment"
+            app:destination="@id/mainFragment"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"/>
     </fragment>
+
+    <!-- LOGIN-->
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.xcaret.android_kotlin_module.fragments.LoginFragment"
         android:label="LoginFragment"
         tools:layout="@layout/fragment_login">
+
+        <!-- Al hacer login exitoso, eliminar Login del back stack -->
         <action
             android:id="@+id/action_loginFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
+            app:destination="@id/mainFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true"
+            app:enterAnim="@android:anim/slide_out_right"
+            app:exitAnim="@android:anim/slide_in_left"/>
     </fragment>
+
+    <!-- MAIN -->
     <fragment
         android:id="@+id/mainFragment"
         android:name="com.xcaret.android_kotlin_module.fragments.MainFragment"
         android:label="MainFragment"
         tools:layout="@layout/fragment_main">
-        <action
-            android:id="@+id/action_mainFragment_to_detailMovieFragment"
-            app:destination="@id/detailMovieFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/detailMovieFragment"
-        android:name="com.xcaret.android_kotlin_module.fragments.DetailMovieFragment"
-        android:label="DetailMovieFragment"
-        tools:layout="@layout/fragment_detail_movie" />
+        <!-- Navegación normal a detalles-->
+       <action
+           android:id="@+id/action_mainFragment_to_detailMovieFragment"
+           app:destination="@id/detailMovieFragment"
+           app:enterAnim="@android:anim/slide_in_left"
+           app:exitAnim="@android:anim/slide_out_right"
+           app:popEnterAnim="@android:anim/slide_in_left"
+           app:popExitAnim="@android:anim/slide_out_right"/>
+   </fragment>
+
+    <!-- DETAIL -->
+   <fragment
+       android:id="@+id/detailMovieFragment"
+       android:name="com.xcaret.android_kotlin_module.fragments.DetailMovieFragment"
+       android:label="DetailMovieFragment"
+       tools:layout="@layout/fragment_detail_movie" />
 </navigation>

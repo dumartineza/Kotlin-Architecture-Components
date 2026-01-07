@@ -8,11 +8,11 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import com.xcaret.android_kotlin_module.base.BaseFragment
-import com.xcaret.android_kotlin_module.database.MoviesDatabase
 import com.xcaret.android_kotlin_module.databinding.FragmentDetailMovieBinding
-import com.xcaret.android_kotlin_module.repositories.MoviesRepository
 import com.xcaret.android_kotlin_module.viewmodels.MovieDetailViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class DetailMovieFragment : BaseFragment() {
 
     private val detailViewModel: MovieDetailViewModel by viewModels()
@@ -27,7 +27,6 @@ class DetailMovieFragment : BaseFragment() {
     override fun setContentView(container: ViewGroup?): View =
         FragmentDetailMovieBinding.inflate(LayoutInflater.from(requireContext()), container, false).apply {
             viewmodel = detailViewModel.apply {
-                repository = MoviesRepository(database = MoviesDatabase.getInstance(requireContext()))
                 getMovie(idMovie)
             }
             ratingBar.max = 10

@@ -6,12 +6,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.xcaret.android_kotlin_module.models.Movie
 import com.xcaret.android_kotlin_module.repositories.MoviesRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MovieDetailViewModel : ViewModel() {
+@HiltViewModel
+class MovieDetailViewModel @Inject constructor(
+    private val repository: MoviesRepository
+) : ViewModel() {
+
     private val _selectedMovie = MutableLiveData<Movie>()
     val selectedMovie: LiveData<Movie> = _selectedMovie
-    lateinit var repository: MoviesRepository
 
     fun getMovie(id: Long) = viewModelScope.launch {
         val movie = repository.getMovieBy(id)

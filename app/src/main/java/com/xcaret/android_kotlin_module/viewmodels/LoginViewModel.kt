@@ -1,5 +1,6 @@
 package com.xcaret.android_kotlin_module.viewmodels
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.xcaret.android_kotlin_module.models.User
 import kotlin.properties.Delegates
@@ -44,4 +45,26 @@ class LoginViewModel : ViewModel() {
 
     private fun credentialsAreOk(username: String, password: String): Boolean =
         username.equals("d", true) && password.equals("xcaret123", true)
+}
+
+class SessionManager(context: Context) {
+
+    private val prefs = context.getSharedPreferences(
+        "app_prefs",
+        Context.MODE_PRIVATE
+    )
+
+    fun saveLogin() {
+        prefs.edit()
+            .putBoolean("is_logged_in", true)
+            .apply()
+    }
+
+    fun isLoggedIn(): Boolean {
+        return prefs.getBoolean("is_logged_in", false)
+    }
+
+    fun logout() {
+        prefs.edit().clear().apply()
+    }
 }

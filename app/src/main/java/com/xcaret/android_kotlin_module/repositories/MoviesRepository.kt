@@ -5,21 +5,24 @@ import com.xcaret.android_kotlin_module.database.MoviesDatabase
 import com.xcaret.android_kotlin_module.interfaces.MoviesAPIService
 import com.xcaret.android_kotlin_module.models.Movie
 import com.xcaret.android_kotlin_module.network.Connectivity
+import javax.inject.Inject
 
-class MoviesRepository(private val service: MoviesAPIService? = MoviesAPIService.getInstance(),
-                       private val database: MoviesDatabase) {
+class MoviesRepository @Inject constructor(
+    private val service: MoviesAPIService,
+    private val database: MoviesDatabase
+) {
 
     suspend fun getMovies(): List<Movie> {
         try {
             return if (Connectivity.isConnected) {
                 val response = getMoviesFromAPI()
-                if (response?.isSuccessful == true && response.body() != null) {
+                if (response.isSuccessful && response.body() != null) {
                     val movieResponse = response.body()
                     val movies = movieResponse?.results ?: emptyList()
                     database.moviesDao().insertMovies(movies)
                     movies
                 } else {
-                    Log.e(TAG, "Error occurred: ${response?.message()}")
+                    Log.e(TAG, "Error occurred: ${response.message()}")
                     emptyList()
                 }
             } else {
@@ -31,7 +34,7 @@ class MoviesRepository(private val service: MoviesAPIService? = MoviesAPIService
         return emptyList()
     }
 
-    private suspend fun getMoviesFromAPI() = service?.getAllMovies()
+    private suspend fun getMoviesFromAPI() = service.getAllMovies()
 
     private suspend fun getMoviesFromDatabase() = database.moviesDao().loadAllMovies()
 

@@ -6,18 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
-import com.bumptech.glide.Glide
 import com.xcaret.android_kotlin_module.R
 
 class SimpleProgressDialog : DialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.dialog_progress_sharingan, container, false)
-        val imageView = view.findViewById<ImageView>(R.id.imageProgress)
-        Glide.with(this).asGif().load(R.raw.sharingan).into(imageView)
+        val view = inflater.inflate(R.layout.dialog_progress, container, false)
+        //Raw GIF
+        //val imageView = view.findViewById<ImageView>(R.id.imageProgress)
+        //Glide.with(this).asGif().load(R.raw.loading).into(imageView)
         return view
     }
 

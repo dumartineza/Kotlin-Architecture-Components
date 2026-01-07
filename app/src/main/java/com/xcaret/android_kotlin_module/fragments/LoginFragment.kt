@@ -15,6 +15,7 @@ import com.xcaret.android_kotlin_module.databinding.FragmentLoginBinding
 import com.xcaret.android_kotlin_module.dialogs.SimpleProgressDialog
 import com.xcaret.android_kotlin_module.models.User
 import com.xcaret.android_kotlin_module.viewmodels.LoginViewModel
+import com.xcaret.android_kotlin_module.viewmodels.SessionManager
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -27,7 +28,6 @@ class LoginFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         dialog = SimpleProgressDialog()
-        context?.theme?.applyStyle(R.style.LoginTheme, true)
     }
 
     override fun setContentView(container: ViewGroup?): View =
@@ -53,6 +53,7 @@ class LoginFragment : BaseFragment() {
             )
             viewModel.login(viewModel.user) { credentialsAreOk ->
                 if (credentialsAreOk) {
+                    SessionManager(requireContext()).saveLogin()
                     lifecycleScope.launch { goToMain() }
                 } else {
                     showBadCredentialsDialog()
@@ -60,6 +61,7 @@ class LoginFragment : BaseFragment() {
                 }
             }
         }
+
         onBackPressed {
             activity?.finish()
         }
@@ -78,7 +80,7 @@ class LoginFragment : BaseFragment() {
         delay(2000)
         dialog?.dismiss()
         val bundle = bundleOf(HAS_TOOLBAR_KEY to true)
-        findNavController().navigate(R.id.mainFragment, bundle)
+        findNavController().navigate(R.id.action_loginFragment_to_mainFragment, bundle)
     }
 
     override fun onDestroyView() {

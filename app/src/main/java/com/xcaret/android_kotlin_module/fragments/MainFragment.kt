@@ -13,7 +13,9 @@ import com.xcaret.android_kotlin_module.adapters.MoviesAdapter
 import com.xcaret.android_kotlin_module.base.BaseFragment
 import com.xcaret.android_kotlin_module.databinding.FragmentMainBinding
 import com.xcaret.android_kotlin_module.viewmodels.MoviesViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainFragment : BaseFragment() {
 
     private val moviesViewModel: MoviesViewModel by viewModels()
