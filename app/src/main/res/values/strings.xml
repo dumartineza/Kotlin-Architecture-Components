@@ -19,4 +19,7 @@
     <string name="menu_sort_by_name">Sort by name</string>
     <string name="menu_sort_by_popularity">Sort by popularity</string>
     <string name="menu_sort_by_rating">Sort by rating</string>
+    <string name="release_date">Release date</string>
+    <string name="rating_detail">%1$1.1f / 10 - %2$d votes</string>
+    <string name="description">Description</string>
 </resources>

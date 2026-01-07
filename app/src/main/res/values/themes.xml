@@ -3,13 +3,13 @@
 
     <!-- CAMBIA ESTO -->
     <style name="Theme.Android_kotlin_module" parent="Theme.MaterialComponents.DayNight.NoActionBar" />
-    <!-- O usa: Theme.AppCompat.DayNight.NoActionBar -->
 
-    <!-- LoginTheme (opcional) -->
     <style name="LoginTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/design_default_color_primary</item>
-        <item name="colorPrimaryDark">@color/design_default_color_primary_dark</item>
-        <item name="colorAccent">@color/design_default_color_primary_variant</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
     </style>
 
 <!-- Uso en Composes

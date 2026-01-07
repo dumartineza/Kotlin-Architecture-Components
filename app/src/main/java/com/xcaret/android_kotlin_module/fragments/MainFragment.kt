@@ -6,6 +6,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.fragment.app.viewModels
 import com.xcaret.android_kotlin_module.R
 import com.xcaret.android_kotlin_module.adapters.MoviesAdapter
@@ -24,6 +25,11 @@ class MainFragment : BaseFragment() {
                 isRefreshing.observe(viewLifecycleOwner) {
                     swipeRefreshMovies.isRefreshing = it
                 }
+
+                getMovies().observe(viewLifecycleOwner) { moviesList ->
+                    adapter?.refreshDataMovies(moviesList)
+                }
+
             }
             adapter = MoviesAdapter()
             lifecycleOwner = viewLifecycleOwner
@@ -39,6 +45,16 @@ class MainFragment : BaseFragment() {
                 moviesViewModel.getMovies(true)
             }
         }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            requireActivity().finish()
+        }
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        moviesViewModel.getMovies(true)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -49,7 +65,7 @@ class MainFragment : BaseFragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            android.R.id.home -> onBackPressed()
+            android.R.id.home -> requireActivity().finish() //onBackPressed()
             R.id.action_menu_sort_by_name -> moviesViewModel.sortMoviesByName()
             R.id.action_menu_sort_by_popularity -> moviesViewModel.sortMoviesByPopularity()
             else -> moviesViewModel.sortMoviesByRating()

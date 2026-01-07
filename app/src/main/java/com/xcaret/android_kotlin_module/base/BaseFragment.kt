@@ -8,14 +8,15 @@ import android.view.ViewGroup
 import android.view.WindowInsets
 import android.widget.FrameLayout
 import android.widget.LinearLayout
-import androidx.appcompat.widget.Toolbar
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import com.xcaret.android_kotlin_module.R
-import kotlin.getValue
+import com.xcaret.android_kotlin_module.helpers.getThemeColor
 
 abstract class BaseFragment : Fragment() {
 
@@ -35,6 +36,7 @@ abstract class BaseFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         parentView = inflater.inflate(R.layout.base_fragment, container, false)
         val fragmentContainer = parentView.findViewById<FrameLayout>(R.id.container_view)
+
         fragmentContainer?.let {
             val contentView = setContentView()
             it.addView(contentView)
@@ -50,6 +52,7 @@ abstract class BaseFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        showSystemUI()
         onViewFragmentCreated(view, savedInstanceState)
     }
 
@@ -57,25 +60,29 @@ abstract class BaseFragment : Fragment() {
         val toolbarView = LayoutInflater.from(context).inflate(resIdToolbar, null, false)
         val toolbar = toolbarView.findViewById<Toolbar>(idToolbar)
         toolbar?.let {
+
+            ViewCompat.setOnApplyWindowInsetsListener(it) { view, insets ->
+                val statusBarHeight = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
+
+                view.setPadding(
+                    view.paddingLeft,
+                    statusBarHeight,
+                    view.paddingRight,
+                    view.paddingBottom
+                )
+                insets
+            }
+
+            val colorPrimaryDark = requireContext().getThemeColor(
+                com.google.android.material.R.attr.colorPrimaryDark
+            )
+
+            toolbarView.setBackgroundColor(colorPrimaryDark)
+
             (parentView as LinearLayout).addView(toolbarView, 0)
+
             parentActivity?.setSupportActionBar(it)
             setHasOptionsMenu(true)
-
-            /*
-            ViewCompat.setOnApplyWindowInsetsListener(it) { v, insets ->
-                val topInset = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
-                v.setPadding(0, topInset, 0, 0)
-                insets
-            }
-             */
-
-
-            ViewCompat.setOnApplyWindowInsetsListener(it) { v, insets ->
-                val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-                v.setPadding(0, systemBars.top, 0, 0)
-                insets
-                //WindowInsetsCompat.CONSUMED
-            }
 
             if (!hasToolbar) {
                 hasToolbar = true
@@ -95,16 +102,12 @@ abstract class BaseFragment : Fragment() {
         }
     }
 
-    @Suppress("DEPRECATION")
     private fun showSystemUI() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
-            activity?.window?.decorView?.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE)
-        } else {
-            activity?.window?.setDecorFitsSystemWindows(true)
-            activity?.window?.insetsController?.apply {
-                show(WindowInsets.Type.navigationBars())
-                show(WindowInsets.Type.statusBars())
-            }
+        activity?.window?.let { window ->
+            WindowCompat.setDecorFitsSystemWindows(window, false)
+            WindowCompat.getInsetsController(window, window.decorView).show(
+                WindowInsetsCompat.Type.systemBars()
+            )
         }
     }
 

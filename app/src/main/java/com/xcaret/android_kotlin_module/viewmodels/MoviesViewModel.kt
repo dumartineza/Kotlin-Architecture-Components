@@ -1,47 +1,54 @@
 package com.xcaret.android_kotlin_module.viewmodels
 
-import android.util.Log
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.xcaret.android_kotlin_module.database.MoviesDatabase
 import com.xcaret.android_kotlin_module.models.Movie
 import com.xcaret.android_kotlin_module.repositories.MoviesRepository
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
-class MoviesViewModel : ViewModel() {
+class MoviesViewModel(
+    application: Application
+) : AndroidViewModel(application) {
 
-    private val TAG = MoviesViewModel::class.java.simpleName
     private lateinit var movies: MutableLiveData<List<Movie>>
-    private val repository = MoviesRepository()
     var isRefreshing: MutableLiveData<Boolean> = MutableLiveData()
+
+    init {
+        getMovies()
+    }
+
+    private val repository: MoviesRepository by lazy {
+        MoviesRepository(
+            database = MoviesDatabase.getInstance(application)
+        )
+    }
 
     @JvmOverloads
     fun getMovies(reloadAgain: Boolean = false): LiveData<List<Movie>> {
         if (!::movies.isInitialized) {
             movies = MutableLiveData()
-            getMoviesFromAPI()
+            getMoviesFromRepository()
         }
         if (reloadAgain) {
-            getMoviesFromAPI()
+            getMoviesFromRepository()
         }
         return movies
     }
 
-    private fun getMoviesFromAPI() {
+    private fun getMoviesFromRepository() {
         isRefreshing.postValue(true)
         viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val response = repository.getMoviesFromAPI()
-                if (response?.isSuccessful == true && response.body() != null) {
-                    movies.postValue(response.body()?.results)
-                } else {
-                    Log.e(TAG, "Error occurred: ${response?.message()}")
-                }
-            } catch (e: Exception) {
-                Log.e(TAG, "Something went wrong, $e")
+            val moviesJob: Deferred<List<Movie>> = async {
+                repository.getMovies()
             }
+            movies.postValue(moviesJob.await())
             isRefreshing.postValue(false)
         }
     }
