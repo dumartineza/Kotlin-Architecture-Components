@@ -8,11 +8,38 @@ import org.junit.runner.RunWith
 
 import org.junit.Assert.*
 
-/**
- * Instrumented test, which will execute on an Android device.
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
+/*
+====================================
+PRUEBAS INSTRUMENTADAS - ANDROID REAL
+====================================
+
+EJECUCIÓN:
+- Se ejecutan en emulador o dispositivo físico
+- Requieren Android OS real
+
+USO PRINCIPAL:
+- UI tests
+- Navegación
+- Integración entre capas
+- Room real
+- Flujos completos de usuario
+
+CAPACIDADES:
+- Context real
+- Activities / Fragments reales
+- Views, Resources, Themes
+- Base de datos real
+
+DESVENTAJAS:
+- Más lentas
+- Requieren setup de emulador
+
+HERRAMIENTAS:
+- AndroidJUnit4
+- Espresso
+- UI Automator
+*/
+
 @RunWith(AndroidJUnit4::class)
 class ExampleInstrumentedTest {
     @Test
