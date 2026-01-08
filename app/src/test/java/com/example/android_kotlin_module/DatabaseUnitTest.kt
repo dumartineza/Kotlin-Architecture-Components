@@ -16,6 +16,32 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
+/*
+====================================
+PRUEBAS UNITARIAS - JVM (test)
+====================================
+EJECUCIÓN:
+- Se ejecutan en la JVM local
+- NO requieren emulador ni dispositivo
+USO PRINCIPAL:
+- Lógica de negocio
+- ViewModels
+- UseCases
+- Repositories (mock)
+- DAOs con Room + Robolectric
+LIMITACIONES:
+- No Android real
+- No sensores, GPS, cámara real
+- Simulación del framework Android
+HERRAMIENTAS:
+- JUnit
+- Robolectric
+- Mockito / MockK
+- kotlinx-coroutines-test
+VELOCIDAD:
+- Muy rápidas
+*/
+
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [Build.VERSION_CODES.P])
 class DatabaseUnitTest {
