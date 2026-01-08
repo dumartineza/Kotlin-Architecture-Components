@@ -9,7 +9,7 @@ import android.os.Build
 
 object Connectivity {
 
-    var isConnected = true
+    var isConnected = false
     private lateinit var connectivityManager: ConnectivityManager
 
     private val callback = object: ConnectivityManager.NetworkCallback() {
@@ -31,13 +31,35 @@ object Connectivity {
 
     fun registerNetworkCallback(context: Context) {
         connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        isConnected = checkCurrentConnection()
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             connectivityManager.registerDefaultNetworkCallback(callback)
         } else {
-            val request = NetworkRequest.Builder().addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET).build()
+            val request = NetworkRequest.Builder()
+                .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+                .build()
             connectivityManager.registerNetworkCallback(request, callback)
         }
     }
 
-    fun unRegisterNetworkCallback() = connectivityManager.unregisterNetworkCallback(callback)
+    private fun checkCurrentConnection(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val network = connectivityManager.activeNetwork ?: return false
+            val capabilities = connectivityManager.getNetworkCapabilities(network) ?: return false
+            capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) &&
+                    capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+        } else {
+            @Suppress("DEPRECATION")
+            val networkInfo = connectivityManager.activeNetworkInfo
+            networkInfo != null && networkInfo.isConnected
+        }
+    }
+
+    fun unRegisterNetworkCallback() {
+        if (::connectivityManager.isInitialized) {
+            connectivityManager.unregisterNetworkCallback(callback)
+        }
+    }
 }
