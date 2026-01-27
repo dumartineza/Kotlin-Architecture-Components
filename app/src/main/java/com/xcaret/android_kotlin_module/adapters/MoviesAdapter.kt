@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.os.bundleOf
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.xcaret.android_kotlin_module.R
@@ -46,7 +45,6 @@ class MoviesAdapter : RecyclerView.Adapter<MoviesAdapter.MovieHolder>() {
 
         holder.parent.setOnClickListener {
             val bundle = bundleOf(BaseFragment.HAS_TOOLBAR_KEY to false, "id" to movieItems[position].id)
-            it.findNavController().navigate(R.id.action_mainFragment_to_detailMovieFragment, bundle)
         }
     }
 

@@ -16,7 +16,6 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import com.xcaret.android_kotlin_module.R
-import com.xcaret.android_kotlin_module.helpers.getThemeColor
 
 abstract class BaseFragment : Fragment() {
 
@@ -73,12 +72,6 @@ abstract class BaseFragment : Fragment() {
                 )
                 insets
             }
-
-            val colorPrimaryDark = requireContext().getThemeColor(
-                com.google.android.material.R.attr.colorPrimaryDark
-            )
-
-            toolbarView.setBackgroundColor(colorPrimaryDark)
 
             (parentView as LinearLayout).addView(toolbarView, 0)
 

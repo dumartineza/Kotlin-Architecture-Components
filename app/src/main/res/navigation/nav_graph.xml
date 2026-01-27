@@ -59,20 +59,6 @@
         android:name="com.xcaret.android_kotlin_module.fragments.MainFragment"
         android:label="MainFragment"
         tools:layout="@layout/fragment_main">
-        <!-- Navegación normal a detalles-->
-       <action
-           android:id="@+id/action_mainFragment_to_detailMovieFragment"
-           app:destination="@id/detailMovieFragment"
-           app:enterAnim="@android:anim/slide_in_left"
-           app:exitAnim="@android:anim/slide_out_right"
-           app:popEnterAnim="@android:anim/slide_in_left"
-           app:popExitAnim="@android:anim/slide_out_right"/>
    </fragment>
 
-    <!-- DETAIL -->
-   <fragment
-       android:id="@+id/detailMovieFragment"
-       android:name="com.xcaret.android_kotlin_module.fragments.DetailMovieFragment"
-       android:label="DetailMovieFragment"
-       tools:layout="@layout/fragment_detail_movie" />
 </navigation>

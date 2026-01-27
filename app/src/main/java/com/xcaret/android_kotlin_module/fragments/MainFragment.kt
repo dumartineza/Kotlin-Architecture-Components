@@ -13,9 +13,7 @@ import com.xcaret.android_kotlin_module.adapters.MoviesAdapter
 import com.xcaret.android_kotlin_module.base.BaseFragment
 import com.xcaret.android_kotlin_module.databinding.FragmentMainBinding
 import com.xcaret.android_kotlin_module.viewmodels.MoviesViewModel
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 class MainFragment : BaseFragment() {
 
     private val moviesViewModel: MoviesViewModel by viewModels()
@@ -27,11 +25,6 @@ class MainFragment : BaseFragment() {
                 isRefreshing.observe(viewLifecycleOwner) {
                     swipeRefreshMovies.isRefreshing = it
                 }
-
-                getMovies().observe(viewLifecycleOwner) { moviesList ->
-                    adapter?.refreshDataMovies(moviesList)
-                }
-
             }
             adapter = MoviesAdapter()
             lifecycleOwner = viewLifecycleOwner
@@ -67,10 +60,7 @@ class MainFragment : BaseFragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            android.R.id.home -> requireActivity().finish() //onBackPressed()
-            R.id.action_menu_sort_by_name -> moviesViewModel.sortMoviesByName()
-            R.id.action_menu_sort_by_popularity -> moviesViewModel.sortMoviesByPopularity()
-            else -> moviesViewModel.sortMoviesByRating()
+            android.R.id.home -> requireActivity().finish()
         }
         return super.onOptionsItemSelected(item)
     }

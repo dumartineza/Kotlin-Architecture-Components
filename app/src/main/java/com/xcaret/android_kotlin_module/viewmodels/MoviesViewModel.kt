@@ -1,56 +1,48 @@
 package com.xcaret.android_kotlin_module.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.xcaret.android_kotlin_module.models.Movie
 import com.xcaret.android_kotlin_module.repositories.MoviesRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class MoviesViewModel @Inject constructor(
-    private val repository: MoviesRepository
-) : ViewModel() {
+class MoviesViewModel : ViewModel() {
 
+    private val TAG = MoviesViewModel::class.java.simpleName
     private lateinit var movies: MutableLiveData<List<Movie>>
+    private val repository = MoviesRepository()
     var isRefreshing: MutableLiveData<Boolean> = MutableLiveData()
-
-    init {
-        getMovies()
-    }
 
     @JvmOverloads
     fun getMovies(reloadAgain: Boolean = false): LiveData<List<Movie>> {
         if (!::movies.isInitialized) {
             movies = MutableLiveData()
-            getMoviesFromRepository()
+            getMoviesFromAPI()
         }
         if (reloadAgain) {
-            getMoviesFromRepository()
+            getMoviesFromAPI()
         }
         return movies
     }
 
-    private fun getMoviesFromRepository() {
+    private fun getMoviesFromAPI() {
         isRefreshing.postValue(true)
         viewModelScope.launch(Dispatchers.IO) {
-            val moviesJob: Deferred<List<Movie>> = async {
-                repository.getMovies()
+            try {
+                val response = repository.getMoviesFromAPI()
+                if (response?.isSuccessful == true && response.body() != null) {
+                    movies.postValue(response.body()!!.results)
+                } else {
+                    Log.e(TAG, "Error occurred: ${response?.message()}")
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Something went wrong, $e")
             }
-            movies.postValue(moviesJob.await())
             isRefreshing.postValue(false)
         }
     }
-
-    fun sortMoviesByName() = movies.postValue(movies.value?.sortedBy { it.title })
-
-    fun sortMoviesByPopularity() = movies.postValue(movies.value?.sortedByDescending { it.popularity })
-
-    fun sortMoviesByRating() = movies.postValue(movies.value?.sortedByDescending { it.rating })
 }

@@ -35,4 +35,5 @@ class SplashFragment : BaseFragment() {
             findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
         }
     }
+
 }
