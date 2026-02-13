@@ -4,22 +4,18 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.xcaret.android_kotlin_module.interfaces.MoviesAPIService
+import androidx.lifecycle.viewModelScope
 import com.xcaret.android_kotlin_module.models.Movie
-import com.xcaret.android_kotlin_module.models.MovieResponse
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.xcaret.android_kotlin_module.repositories.MoviesRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MoviesViewModel : ViewModel() {
 
     private val TAG = MoviesViewModel::class.java.simpleName
     private lateinit var movies: MutableLiveData<List<Movie>>
+    private val repository = MoviesRepository()
     var isRefreshing: MutableLiveData<Boolean> = MutableLiveData()
-
-    init {
-        getMovies()
-    }
 
     @JvmOverloads
     fun getMovies(reloadAgain: Boolean = false): LiveData<List<Movie>> {
@@ -35,24 +31,18 @@ class MoviesViewModel : ViewModel() {
 
     private fun getMoviesFromAPI() {
         isRefreshing.postValue(true)
-        val call = MoviesAPIService.create().getAllMovies()
-        call.enqueue(object : Callback<MovieResponse> {
-            override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
-                Log.e(TAG, "Something went wrong, $t")
-                isRefreshing.postValue(false)
-            }
-
-            override fun onResponse(call: Call<MovieResponse>, response: Response<MovieResponse>) {
-                if (response.isSuccessful && response.body() != null) {
-                    val listMovies = response.body()!!.results
-                    Log.d(TAG, listMovies.toString())
-                    movies.postValue(listMovies)
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val response = repository.getMoviesFromAPI()
+                if (response?.isSuccessful == true && response.body() != null) {
+                    movies.postValue(response.body()!!.results)
                 } else {
-                    Log.e(TAG, "Error occurred: ${response.message()}")
+                    Log.e(TAG, "Error occurred: ${response?.message()}")
                 }
-                isRefreshing.postValue(false)
+            } catch (e: Exception) {
+                Log.e(TAG, "Something went wrong, $e")
             }
-        })
+            isRefreshing.postValue(false)
+        }
     }
-
 }

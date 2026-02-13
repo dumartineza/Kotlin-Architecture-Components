@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.xcaret.android_kotlin_module.R
 import com.xcaret.android_kotlin_module.base.BaseFragment
@@ -16,6 +17,7 @@ import com.xcaret.android_kotlin_module.models.User
 import com.xcaret.android_kotlin_module.viewmodels.LoginViewModel
 import com.xcaret.android_kotlin_module.viewmodels.SessionManager
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class LoginFragment : BaseFragment() {
 
@@ -52,7 +54,7 @@ class LoginFragment : BaseFragment() {
             viewModel.login(viewModel.user) { credentialsAreOk ->
                 if (credentialsAreOk) {
                     SessionManager(requireContext()).saveLogin()
-                    goToMain()
+                    lifecycleScope.launch { gotoMain() }
                 } else {
                     showBadCredentialsDialog()
                     dialog?.dismiss()
@@ -74,20 +76,11 @@ class LoginFragment : BaseFragment() {
             }.create().show()
     }
 
-    private fun goToMain() {
-        object : Thread() {
-            override fun run() {
-                try {
-                    sleep(2000)
-                } catch (e: Exception) {
-                    throw IllegalAccessError("Something went wrong")
-                } finally {
-                    dialog?.dismiss()
-                    val bundle = bundleOf(HAS_TOOLBAR_KEY to true)
-                    view?.post { findNavController().navigate(R.id.mainFragment, bundle) }
-                }
-            }
-        }.start()
+    private suspend fun gotoMain(){
+        delay(2000)
+        dialog?.dismiss()
+        val bundle = bundleOf(HAS_TOOLBAR_KEY to true)
+        findNavController().navigate(R.id.action_loginFragment_to_mainFragment, bundle)
     }
 
     override fun onDestroyView() {
