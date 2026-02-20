@@ -43,6 +43,24 @@ android {
         viewBinding = true
         //compose = true
     }
+    sourceSets {
+        getByName("main") {
+            res {
+                srcDirs("src/main/res", "src/test/resources")
+            }
+            resources {
+                srcDirs("src/main/resources", "src/test/resources", "src/test/resources/json")
+            }
+            java {
+                srcDirs("src/main/java", "src/test/resources")
+            }
+        }
+        getByName("debug") {
+            resources {
+                srcDirs("src/debug/resources", "src/test/resources")
+            }
+        }
+    }
 }
 
 dependencies {
@@ -89,6 +107,7 @@ dependencies {
     implementation(libs.retrofit.converter.gson)
     implementation(libs.okhttp)
     implementation(libs.okhttp.logging)
+    implementation(libs.okhttp.mockwebserver)
 
     // Hilt
     implementation(libs.hilt)
@@ -106,4 +125,5 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+    testImplementation(kotlin("test"))
 }

@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import com.xcaret.android_kotlin_module.network.Connectivity
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -13,9 +14,11 @@ class MainActivity : AppCompatActivity() {
             isAppearanceLightStatusBars = false
         }
         setContentView(R.layout.activity_main)
+        Connectivity.registerNetworkCallback(this)
     }
 
     override fun onDestroy() {
+        Connectivity.unRegisterNetworkCallback()
         super.onDestroy()
     }
 
