@@ -24,5 +24,5 @@ data class Movie(
     @SerializedName("vote_average") var rating: Double = 0.0,
     var vote_count: Int = 0,
     @SerializedName("poster_path") var poster_image_path: String = "",
-    @SerializedName("backdrop_path") var poster_thumbnail: String = ""
+    @SerializedName("backdrop_path") var poster_thumbnail: String? = null
 )
